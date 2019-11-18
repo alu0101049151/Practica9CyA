@@ -50,10 +50,10 @@ class GSymbols {
     */
     bool checkIfBelongs(char toCheck);
 
-    GSymbols& operator= (const GSymbols &alphabet);
+    GSymbols& operator= (const GSymbols &gsymbols);
 
 	private:
-		std::set<char> alphabet_; //!< Character set representing the DFA's alphabet
+		std::set<char> gramSymbols_; //!< Represents the set of grammatical symbols. 
 };
 
 #endif //PRACTICE9_GSYMBOLS_H

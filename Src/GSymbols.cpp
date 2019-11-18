@@ -30,14 +30,14 @@ GSymbols::~GSymbols () {}
 * Inserts the symbol passed as a parameter in the alphabet. 
 */
 void GSymbols::insertGSymbols (const char symbol) {
-	alphabet_.insert(symbol);
+	gramSymbols_.insert(symbol);
 }
 
 /**
 * @brief returns alphabet.
 */
 std::set<char> GSymbols::getGSymbols() const {
-  return alphabet_;
+  return gramSymbols_;
 }
 
 /**
@@ -46,15 +46,15 @@ std::set<char> GSymbols::getGSymbols() const {
 */
 bool GSymbols::checkIfBelongs(char toCheck) {
   bool belong = false;
-  for (auto i: alphabet_) {
+  for (auto i: gramSymbols_) {
     if (i == toCheck)
       belong = true;
   }
   return belong;
 }
 
-GSymbols& GSymbols::operator= (const GSymbols &alphabet) {
-  this->alphabet_ = alphabet.alphabet_;
+GSymbols& GSymbols::operator= (const GSymbols &symbols) {
+  this->gramSymbols_ = symbols.gramSymbols_;
   return *this;
 }
 
