@@ -57,7 +57,7 @@ class Production {
     char getLeftPart () const;
 
     /**
-    * @return a string of grammatical symbols.
+     @return a string of grammatical symbols.
     */
     std::string getRightPart () const;
 

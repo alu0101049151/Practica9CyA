@@ -19,11 +19,48 @@
 
 #include "Grammar.h"
 
+
+Grammar::Grammar (GSymbols terminals, GSymbols nonTerminals, std::string startSymbol, std::set<Production> productions):
+  terminals_(terminals),
+  nonTerminals_(nonTerminals),
+  startSymbol_(startSymbol),
+  productions_(productions) {}
+
 Grammar::Grammar (std::string& grammarDefinition) {
   readAndBuildGrammar(grammarDefinition);
 }
 
 Grammar::~Grammar () {}
+
+/**
+* Returns the set of productions of the grammar.
+*/
+std::set<Production> Grammar::getProductions() const {
+  return productions_;
+}
+
+
+/**
+* Returns the set of terminals of the grammar.
+*/
+GSymbols Grammar::getTerminals() const {
+  return terminals_;
+}
+
+/**
+* Inserts a new production into the productions set of the grammar.
+*/
+void Grammar::insertProduction(Production auxProduction) {
+  productions_.insert(auxProduction);
+}
+
+/**
+* Inserts a new nonTerminal into the nonTerminals set of the grammar.
+*/
+void Grammar::insertNonTerminal(char newNonterminal) {
+  nonTerminals_.insertGSymbols(newNonterminal);
+}
+
 
 /**
 * Reads the grammar description of the input file and builds the grammar.
@@ -285,4 +322,92 @@ void Grammar::printGrammar(std::string& outputFile) {
 }
 
 
+/**
+* Converts the current Grammar to the Chomsky Normal Form
+*/
 
+Grammar Grammar::convertToCNF() {
+  GSymbols auxNonTerminals = nonTerminals_;
+  std::set<Production> auxProductions =  productions_;
+  // terminals_ and startSymbol_ will be taken from class attributes.
+
+  int size = 0;
+  Grammar auxGrammar(terminals_, auxNonTerminals, startSymbol_, auxProductions);
+
+  for (auto i: productions_) {
+    i.getRightPart().size() == size;
+    if (size >= 2)
+      size = 2;
+
+    switch (size) {
+      case 1: // If the production only contains a terminal on the right side A -> a
+      {
+        Production auxProduction(i.getLeftPart(), i.getRightPart());
+        auxProductions.insert(auxProduction);
+        break;
+      }
+      case 2:
+      {
+        firstCNF(auxGrammar); // Firs loop of the CNF algorithm
+
+        bool isNonTerminal1 = nonTerminals_.checkIfBelongs(i.getRightPart()[0]);
+        bool isNonTerminal2 = nonTerminals_.checkIfBelongs(i.getRightPart()[1]);
+      }
+
+    }
+  }
+
+
+
+}
+
+
+/**
+* Carries out the first loop of the Chomsly Normal Form algorithm.
+*/
+void Grammar::firstCNF(Grammar& grammar) {
+  char leftPart = 'A';
+  std::string auxStr;
+
+  for (auto i: grammar.getProductions()) {
+    if (i.getRightPart().size() >= 2) {    // If is like A -> aa | AA | aaAA |...
+      for (int j = 0; j < i.getRightPart().size(); ++j) {
+        if (grammar.getTerminals().checkIfBelongs(i.getRightPart()[j])) {
+          leftPart = generateNonTerminal(leftPart);
+          grammar.insertNonTerminal(leftPart);
+          auxStr = i.getRightPart().substr(j,1);
+          Production auxProduction(leftPart, auxStr);
+          grammar.insertProduction(auxProduction);
+        }
+      }
+    }
+    else { // If is like A -> a or S -> ~
+      Production auxProduction(i.getLeftPart(), i.getRightPart());
+      grammar.insertProduction(auxProduction);
+    }
+  }
+}
+
+
+/**
+* @brief generates a new nonTerminal for a new production
+*/
+char Grammar::generateNonTerminal(char currentTerminal) {
+  bool belongs = true;
+  while (belongs) {
+    if (nonTerminals_.checkIfBelongs(currentTerminal)) {
+      currentTerminal++;
+    }
+    else
+      belongs = false;
+  }
+  return currentTerminal;
+}
+
+Grammar& Grammar::operator=(const Grammar& grammar) {
+  this->terminals_ = grammar.terminals_;
+  this->nonTerminals_ = grammar.nonTerminals_;
+  this->startSymbol_ = grammar.startSymbol_;
+  this->productions_ = grammar.productions_;
+  return *this;
+}

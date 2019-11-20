@@ -36,6 +36,7 @@ const std::string COMMENT = "//";
 
 class Grammar {
   public:
+    Grammar (GSymbols terminals, GSymbols nonTerminals, std::string starSymbol, std::set<Production> Productions);
     Grammar (std::string& grammarDefinition);
     ~Grammar ();
 
@@ -45,13 +46,29 @@ class Grammar {
     */
   //  Nfa convertToNFA();
 
+    /**
+    * @brief Prints the Grammar in the outputFile.
+    * @param ouputFile Contains the name of the output file.
+    */
 		void printGrammar(std::string& outputFile);
+
+    /**
+    * @brief converts the current Grammar to the Chomsky Normal Form
+    * @return the grammar in Chomsky Normal Form
+    */
+    Grammar convertToCNF();
+
+
+    Grammar& operator=(const Grammar& grammar);
   
 	private:
-    //std::set<char> getTerminals() const;
+    GSymbols getTerminals() const;
     //std::set<char> getNonTerminals() const;
     //std::string getstartSymbol() const;
-    //std::set<Production> getProductions() const;
+    std::set<Production> getProductions() const;
+
+    void insertProduction(Production auxProduction);
+    void insertNonTerminal(char newNonterminal);
    
     /**
     * @brief Reads the grammar description of the input file and builds the grammar.
@@ -59,7 +76,16 @@ class Grammar {
     */
     void readAndBuildGrammar(std::string& grammarDefinition);
     
-    
+    /**
+    * @brief Is the first loop of the Chomsly Normal Form algorithm.
+    */
+    void firstCNF(Grammar& grammar);
+
+    /**
+    * @brief generates a new nonTerminal for a new production
+    */
+    char generateNonTerminal(char currentTerminal);
+     
 		GSymbols        terminals_;         //!< Represents the set of terminals of the grammar.
     GSymbols     nonTerminals_;         //!< Represents the set of non terminals of
                                         //!< the grammar.
