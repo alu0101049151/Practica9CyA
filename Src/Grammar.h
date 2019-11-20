@@ -13,19 +13,26 @@
  *                Practice statement:
  *                https://campusvirtual.ull.es/1920/pluginfile.php/188731/mod_assign/introattachment/0/CYA_1920_Practica_9.pdf?forcedownload=1
  * Revision history:
- *                18/11/2019 - Creation (first version) of the code
+ *                17/11/2019 - Creation (first version) of the code
  */
 
 
 #ifndef PRACTICE9_GRAMMAR_H
 #define PRACTICE9_GRAMMAR_H
 
+
+#include <iostream>
+#include <sstream>
+
 //#include "Nfa.h"
+#include "GSymbols.h"
 #include "Production.h"
 
+const char NEWLINE = '\n';
 const std::string STICK = "|";
 const std::string ARROW = "->";
 const std::string FINAL = "f";
+const std::string COMMENT = "//";
 
 class Grammar {
   public:
@@ -53,8 +60,8 @@ class Grammar {
     void readAndBuildGrammar(std::string& grammarDefinition);
     
     
-		Alphabet        terminals_;         //!< Represents the set of terminals of the grammar.
-    Alphabet     nonTerminals_;         //!< Represents the set of non terminals of
+		GSymbols        terminals_;         //!< Represents the set of terminals of the grammar.
+    GSymbols     nonTerminals_;         //!< Represents the set of non terminals of
                                         //!< the grammar.
     std::string    startSymbol_;        //!< Is the boot symbol.
     std::set<Production> productions_;  //!< Is the set of productions of the

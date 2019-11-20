@@ -13,7 +13,7 @@
  *                Practice statement:
  *                https://campusvirtual.ull.es/1920/pluginfile.php/188731/mod_assign/introattachment/0/CYA_1920_Practica_9.pdf?forcedownload=1
  * Revision history:
- *                18/11/2019 - Creation (first version) of the code
+ *                17/11/2019 - Creation (first version) of the code
  */
 
 
@@ -69,7 +69,7 @@ void Grammar::readAndBuildGrammar(std::string& grammarDefinition) {
     for (int i = 0; i < temp; i++) {
       std::getline(inputFile, read);
       auxChar = read[0];
-      terminals_.insertAlphabet(auxChar);
+      terminals_.insertGSymbols(auxChar);
       read.clear();
     }
 
@@ -83,7 +83,7 @@ void Grammar::readAndBuildGrammar(std::string& grammarDefinition) {
      for (int i = 0; i < temp; ++i) {
        std::getline(inputFile, read);
        auxChar = read[0];
-       nonTerminals_.insertAlphabet(auxChar);
+       nonTerminals_.insertGSymbols(auxChar);
        read.clear();
      }
 
@@ -127,6 +127,7 @@ void Grammar::readAndBuildGrammar(std::string& grammarDefinition) {
 /**
 * Generates an NFA from the grammar read.
 */
+/*
 Nfa Grammar::convertToNFA() {
 
   // Generate the states set
@@ -157,7 +158,8 @@ Nfa Grammar::convertToNFA() {
 
   for (auto i: productions_) {
    std::string auxCurrent(1, i.getLeftPart());
-    auxProduction = i.getRightPart();
+
+auxProduction = i.getRightPart();
 
     switch (auxProduction.size()) {
       case 1:   // If it only contains a grammatical symbol.
@@ -257,19 +259,20 @@ Nfa Grammar::convertToNFA() {
   Nfa nfa(startSymbol_, auxStates, auxFinalStates, auxAlphabet, auxTransitions);
   return nfa;
 }
+*/
 
 
 void Grammar::printGrammar(std::string& outputFile) {
 	std::ofstream outputGrammar;
 	outputGrammar.open(outputFile);
 
-	outputGrammar << terminals_.getAlphabet().size() << NEWLINE;
-	for (auto i: terminals_.getAlphabet()) {
+	outputGrammar << terminals_.getGSymbols().size() << NEWLINE;
+	for (auto i: terminals_.getGSymbols()) {
 		outputGrammar << i << NEWLINE;
 	}
 
-	outputGrammar << nonTerminals_.getAlphabet().size() << NEWLINE;
-  for (auto i: nonTerminals_.getAlphabet()) {
+	outputGrammar << nonTerminals_.getGSymbols().size() << NEWLINE;
+  for (auto i: nonTerminals_.getGSymbols()) {
     outputGrammar << i << NEWLINE;
   }
 
